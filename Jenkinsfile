@@ -72,14 +72,14 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh """
-                   echo  "Here i wrote shell script"
-                   # sleep 10
-                """
-
+                build job: "catalogue-deploy", wait: ture,
+                    parameters: [
+                       string(name: 'version', value:"${packageVersion}"),
+                       string(name: 'environment', value: 'dev')
+                    ]   
             }
-        }
-        
+        }        
+            
     }
     //  post build
     post { 
