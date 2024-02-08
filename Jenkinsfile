@@ -73,10 +73,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    build job: "catalogue-deploy", wait: ture,parameters: [
-                       string(name: 'version', value:"${packageVersion}"),
-                       string(name: 'environment', value: "dev")
-                    ]
+                        def params = [
+                           string(name: 'version', value:"$packageVersion"),
+                           string(name: 'environment', value: "dev")
+                        ]
+                        build job: "catalogue-deploy", wait: true, parameters: params
                 }     
             }
                     
