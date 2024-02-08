@@ -24,20 +24,20 @@ pipeline {
     //}
    //   build
     stages {
-        stage('Get the version') {
-            steps {
-                script{
-                    def packageJson = readJson file: 'package.json'
-                    packageVersion = packageJson.version
-                    echo "application version: $packageVersion"
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
+        // stage('Get the version') {
+        //     steps {
+        //         script{
+        //             def packageJson = readJson file: 'package.json'
+        //             packageVersion = packageJson.version
+        //             echo "application version: $packageVersion"
+        //         }
+        //     }
+        // }
+        // stage('Test') {
+        //     steps {
+        //         echo 'Testing..'
+        //     }
+        // }
         stage('Deploy') {
             steps {
                 sh """
