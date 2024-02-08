@@ -72,12 +72,12 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                build job: "catalogue-deploy", wait: ture,
-                    parameters: [
-                       string(name: 'version', value:"${packageVersion}"),
-                       string(name: 'environment', value: 'dev')
-                    ]   
+                build job: "catalogue-deploy", wait: ture,parameters: [
+                    string(name: 'version', value:"${packageVersion}"),
+                    string(name: 'environment', value: "dev")
+                ] 
             }
+                    
         }        
             
     }
