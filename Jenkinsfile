@@ -12,8 +12,8 @@ pipeline {
         timeout(time: 1, unit: 'HOURS') 
         disableConcurrentBuilds()
     }
-    //parameters {
-    //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
     //     text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
 
@@ -22,7 +22,7 @@ pipeline {
     //     choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
 
     //     password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-    //}
+    }
    //   build
     stages {
         stage('Get the version') {
@@ -88,7 +88,7 @@ pipeline {
     post { 
         always { 
             echo 'I will always say Hello again!'
-            // deleteDir()
+            deleteDir()
         }
         failure { 
             echo 'This will runs when pipeline is failed, used generally to send some alerts'
