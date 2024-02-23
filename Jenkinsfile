@@ -6,7 +6,7 @@ pipeline {
     }
     environment { 
         packageVersion = ''
-        nexusURL = '172.31.3.245:8081'
+        nexusURL = '172.31.6.71:8081'
     }
     options {
         timeout(time: 1, unit: 'HOURS') 
