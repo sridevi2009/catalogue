@@ -11,7 +11,7 @@ pipeline {
     options {
         timeout(time: 1, unit: 'HOURS')
         disableConcurrentBuilds()
-        // ansiColor ('xterm') 
+        ansiColor ('xterm') 
     }
     // parameters {
     //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
@@ -77,7 +77,7 @@ pipeline {
                 script {
                         def params = [
                             string(name: 'version', value: "$packageVersion"),
-                            strin(name: 'environment', value: "dev")
+                            string(name: 'environment', value: "dev")
                         ]
                         build job: "catalogue-deploy", wait:true, parameters: params    
                     }
