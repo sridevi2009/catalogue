@@ -1,224 +1,92 @@
-// pipeline {
-//     agent {
-//        node {
-//            label 'Agent-1'
-//        }
-//     }
-//     environment { 
-//         packageVersion = ''
-//         nexusURL = '172.31.6.71:8081'
-//     }
-//     options {
-//         timeout(time: 1, unit: 'HOURS') 
-//         disableConcurrentBuilds()
-//     }
-//     parameters {
-//     //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-
-//     //     text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-//            booleanParam(name: 'Deploy', defaultValue: false, description: 'Toggle this value')
-
-//     //     choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-//     //     password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-//     }
-//    //   build
-//     stages {
-//         stage('Get the version') {
-//             steps {
-//                 script {
-//                     def packageJson = readJSON file: 'package.json'
-//                     packageVersion = packageJson.version
-//                     echo "application version: $packageVersion"
-//                 }
-//             }
-//         }
-//         stage('Install dependencies') {
-//             steps {
-//                 sh """
-//                    npm install
-//                 """   
-//             }
-//         }
-//         stage('Build') {
-//             steps {
-//                 sh """
-//                     ls -la  
-//                     zip -q -r catalogue.zip ./* ".git" -x "*.zip"
-//                     ls -ltr
-
-//                 """
-//             }
-//         }
-//          stage('publish Artifact') {
-//             steps {
-//                 nexusArtifactUploader(
-//                    nexusVersion: 'nexus3',
-//                    protocol: 'http',
-//                    nexusUrl: "${nexusURL}",
-//                    groupId: 'com.roboshop',
-//                    version: "${packageVersion}",
-//                    repository: 'catalogue',
-//                    credentialsId: 'nexus-auth',
-//                    artifacts: [
-//                        [artifactId: 'catalogue',
-//                        classifier: '',
-//                        file: 'catalogue.zip',
-//                        type: 'zip']
-//                    ]
-//                 )
-//             }          
-//         }
-//         stage('Deploy') {
-//             when {
-//                 expression{
-//                     params.Deploy == 'true'
-//                 }
-                
-//             steps {
-//                 script {
-//                         def params = [
-//                            string(name: 'version', value:"$packageVersion"),
-//                            string(name: 'environment', value: "dev")
-//                         ]
-//                         build job: "catalogue-deploy", wait: true, parameters: params
-//                 }     
-//             }
-                    
-//         }        
-            
-//     }
-//     //  post build
-//     post { 
-//         always { 
-//             echo 'I will always say Hello again!'
-//             deleteDir()
-//         }
-//         failure { 
-//             echo 'This will runs when pipeline is failed, used generally to send some alerts'
-//         }
-//         success{
-//             echo 'I will say hello when pipeline is success'
-//         }
-    
-//     }
-// }
-
-
 pipeline {
-    agent {
+    agent  {
         node {
-            label 'Agent-1'
+            label 'agent'
         }
     }
     environment { 
         packageVersion = ''
-        nexusURL = '172.31.6.71:8081'
     }
     options {
         timeout(time: 1, unit: 'HOURS')
         disableConcurrentBuilds()
+        ansiColor ('xterm') 
     }
-    parameters {
-        // string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+    // parameters {
+    //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
-        // text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+    //     text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
 
-        booleanParam(name: 'Deploy', defaultValue: false, description: 'Toggle this value')
+    //     booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
 
-        // choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+    //     choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
 
-        // password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-    }
-    // build
+    //     password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+    // }
+    
     stages {
-        stage('Get the version') {
+        stage('get the version') {
             steps {
                 script {
-                    def packageJson = readJSON file: 'package.json'
-                    packageVersion = packageJson.version
-                    echo "application version: $packageVersion"
+                  def packageJson = readJSON text: 'package.json'
+                  packageVersion = packageJson.version
+                  echo "application version: $packageVersion"
+
                 }
             }
         }
-        stage('Install dependencies') {
+        stage('build') {
+            steps {
+                echo ' install dependecies '
+            }
+        }
+        stage('testing') {
+            steps {
+                echo 'testing the code'
+            }
+        }
+        stage('deploy') {
             steps {
                 sh """
-                    npm install
+                    echo " I will run shell-script here "
+                    echo "$GREETING"
+                   
+                    sleep 10   
                 """
             }
         }
-        // stage('Unit tests') {
+        // stage('params') {
         //     steps {
         //         sh """
-        //             echo "unit tests will run here"
-        //         """
+
+        //             echo "Hello ${params.PERSON}"
+
+        //             echo "Biography: ${params.BIOGRAPHY}"
+
+        //             echo "Toggle: ${params.TOGGLE}"
+
+        //             echo "Choice: ${params.CHOICE}"
+
+        //             echo "Password: ${params.PASSWORD}"
+        //         """    
+                
         //     }
         // }
-        // stage('Sonar Scan'){
-        //     steps{
-        //         sh """
-        //             sonar-scanner
-        //         """
-        //     }
-        // }
-        stage('Build') {
-            steps {
-                sh """
-                    ls -la
-                    zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
-                    ls -ltr
-                """
-            }
+    } 
+
+    post {
+        always {
+            echo ' I will always say Hello again '
         }
-        stage('Publish Artifact') {
-            steps {
-                 nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: "${nexusURL}",
-                    groupId: 'com.roboshop',
-                    version: "${packageVersion}",
-                    repository: 'catalogue',
-                    credentialsId: 'nexus-auth',
-                    artifacts: [
-                        [artifactId: 'catalogue',
-                        classifier: '',
-                        file: 'catalogue.zip',
-                        type: 'zip']
-                    ]
-                )
-            }
+        failure {
+            echo ' I will always run when the above pipeline is FAILURE '
         }
-        stage('Deploy') {
-            when {
-                expression{
-                    params.Deploy == 'true'
-                }
-            }
-            steps {
-                script {
-                        def params = [
-                            string(name: 'version', value: "$packageVersion"),
-                            string(name: 'environment', value: "dev")
-                        ]
-                        build job: "catalogue-deploy", wait: true, parameters: params
-                    }
-            }
+        success {
+            echo ' I will run always when the above pipeline is SUCCESS '
         }
-    }
-    // post build
-    post { 
-        always { 
-            echo 'I will always say Hello again!'
-            deleteDir()
+        aborted {
+            echo 'I will run when the pipeline is ABORT'
         }
-        failure { 
-            echo 'this runs when pipeline is failed, used generally to send some alerts'
-        }
-        success{
-            echo 'I will say Hello when pipeline is success'
-        }
+
     }
 }
