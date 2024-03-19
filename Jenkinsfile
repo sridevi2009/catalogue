@@ -74,10 +74,12 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh """
-                    echo " I will run shell-script here "
-                    # sleep 10   
-                """
+                script {
+                        def params = [
+                            string(name: 'version', value: "$packageVersion")
+                        ]
+                        build job: "catalogue-deploy", wait:true, parameters: params    
+                    }
             }
         }
         // stage('params') {
