@@ -35,9 +35,11 @@ pipeline {
                 }
             }
         }
-        stage('build') {
+        stage('install dependencies') {
             steps {
-                echo ' install dependecies '
+                sh """
+                    npm install
+                """
             }
         }
         stage('testing') {
