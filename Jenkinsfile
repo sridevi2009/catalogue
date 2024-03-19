@@ -80,7 +80,7 @@ pipeline {
                             string(name: 'environment', value: "dev")
                         ]
                         build job: "catalogue-deploy", wait: true, parameters: params    
-                    }
+                }    
             }
         }
         // stage('params') {
