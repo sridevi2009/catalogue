@@ -4,10 +4,10 @@ pipeline {
             label 'agent'
         }
     }
-    // environment { 
-    //     packageVersion = ''
-    //     nexusURL = '172.31.14.6:8081'
-    // }
+    environment { 
+        packageVersion = ''
+        nexusURL = '172.31.14.6:8081'
+    }
     options {
         timeout(time: 1, unit: 'HOURS')
         disableConcurrentBuilds()
